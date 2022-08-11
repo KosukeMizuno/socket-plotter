@@ -1,22 +1,26 @@
 from ctypes import sizeof
 import socket
 import pickle
+import time
 
 import numpy as np
 
 
 ip_address = '127.0.0.1'
-port = 7772
+port = 7707
 buffer_size = 4096
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((ip_address, port))
+while True:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((ip_address, port))
 
-    v = np.arange(1024000, dtype=np.float64)
+        v = np.arange(100, dtype=np.float64), np.random.randn(100)
 
-    data = pickle.dumps(v)
-    header = pickle.dumps({'size': len(data)})
+        data = pickle.dumps(v)
+        header = pickle.dumps({'size': len(data)})
 
-    s.send(header)
-    print(s.recv(buffer_size))
-    s.sendall(data)
+        s.send(header)
+        # print(s.recv(buffer_size))
+        s.sendall(data)
+
+    time.sleep(0.2)
