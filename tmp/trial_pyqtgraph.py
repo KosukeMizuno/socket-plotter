@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 
-from PyQt5.QtWidgets import QApplication
+from PySide2.QtWidgets import QApplication
 from pyqtgraph.Qt import QtCore
 import pyqtgraph as pg
 

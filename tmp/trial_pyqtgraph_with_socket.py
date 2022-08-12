@@ -7,9 +7,9 @@ from typing import Any
 import numpy as np
 import pyqtgraph as pg
 
-from PyQt5 import QtCore
-from PyQt5.QtCore import pyqtSignal, QThread
-from PyQt5.QtWidgets import QApplication
+from PySide2 import QtCore
+from PySide2.QtCore import QThread
+from PySide2.QtWidgets import QApplication
 
 
 class DataReceiver(QThread):
@@ -17,8 +17,8 @@ class DataReceiver(QThread):
     port = 7707
     buffer_size = 4096
 
-    sigData = pyqtSignal(object)
-    sigClear = pyqtSignal()
+    sigData = QtCore.Signal(object)
+    sigClear = QtCore.Signal()
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
