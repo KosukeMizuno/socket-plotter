@@ -26,19 +26,16 @@ class DataReceiver(QThread):
         self.mutex = QtCore.QMutex()
         self._stop_flg = False
 
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.bind((self.addr, self.port))
-        self.s.listen(1)
-        self.s.settimeout(1)
-
-    def __del__(self):
-        self.stop()
-
     def stop(self):
         with QtCore.QMutexLocker(self.mutex):
             self._stop_flg = True
 
     def run(self):
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.s.bind((self.addr, self.port))
+        self.s.listen(1)
+        self.s.settimeout(0.1)
+
         while not self._stop_flg:
             try:
                 v = self._recv()
@@ -105,6 +102,10 @@ class LinePlotter():
         self.receiver.sigData.connect(self.draw_unpack)
         self.receiver.sigClear.connect(self.clear)
         self.receiver.start()
+        # TODO: QThread の適切な終了方法がわからん
+        #       `QThread: Destroyed while thread is still running` と怒られてしまう
+        # self.app.aboutToQuit.conncect(self.receiver.stop()) とかやると別の怒られが起きる
+        # とりあえず放置。。。
 
     def draw_unpack(self, args):
         self.draw(*args)
