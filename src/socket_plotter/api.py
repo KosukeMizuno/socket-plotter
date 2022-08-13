@@ -1,16 +1,16 @@
 from __future__ import annotations
-from re import sub
 
+import sys
 import socket
 import pickle
 import subprocess
 from pathlib import Path
 
-DEFAULT_PORT_LINEPLOTTER = 8765
 DEFAULT_ADDR_LINEPLOTTER = '127.0.0.1'
+DEFAULT_PORT_LINEPLOTTER = 8765
 
-DEFAULT_PORT_IMAGEPLOTTER = 8766
 DEFAULT_ADDR_IMAGEPLOTTER = '127.0.0.1'
+DEFAULT_PORT_IMAGEPLOTTER = 8766
 
 
 def plot_lines(*args,
@@ -26,6 +26,8 @@ def plot_lines(*args,
         - xdata, ydata1, ydata2, ...
 
     TODO: 上記のように受け付けてないので要修正, ydataをそのまま送る分にはOK
+
+    # TODO: xlabel, ylabel, title などを設定できるようにしたい
     """
     _ping_or_launch_lineplotter(addr, port)
     _send_data(args, addr, port)
@@ -37,7 +39,7 @@ def plot_image(img,
     pass
 
 
-def _ping_or_launch_lineplotter(addr, port):
+def _ping_or_launch_lineplotter(addr: str, port: int):
     """lineplotterがあるか確認、起動してなければ起動する
     """
     try:
@@ -46,19 +48,18 @@ def _ping_or_launch_lineplotter(addr, port):
             header = pickle.dumps({'type': 'ping'})
             s.send(header)
     except ConnectionRefusedError:
-        # FIXME: まだ起動できない
         fn_entry = Path(__file__).parent / 'entry_points/lineplotter.py'
-        _ = subprocess.Popen(['python', str(fn_entry.absolute()),
+        _ = subprocess.Popen([sys.executable, fn_entry.absolute(),
                               '--addr', addr, '--port', str(port)])
 
 
-def _ping_or_launch_imagplotter():
+def _ping_or_launch_imagplotter(addr: str, port: int):
     """imageplotterがあるか確認、起動してなければ起動する
     """
     pass
 
 
-def _send_data(v, addr, port):
+def _send_data(v, addr: str, port: int):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((addr, port))
 
@@ -73,4 +74,4 @@ def _send_data(v, addr, port):
 if __name__ == '__main__':
     # test code
     import numpy as np
-    plot_lines(np.random.randn(100).reshape((2, 50)))
+    plot_lines(np.random.randn(100))
