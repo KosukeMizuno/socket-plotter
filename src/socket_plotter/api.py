@@ -28,8 +28,6 @@ def plot_lines(*args,
         - xdata, [ydata]
         - xdata, ydata1, ydata2
         - xdata, ydata1, ydata2, ...
-
-    TODO: 複数ラインを受けたときに適切に色を変えてプロットしたい
     """
     _ping_or_launch_lineplotter(addr, port)
 

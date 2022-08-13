@@ -78,5 +78,6 @@ class LinePlotter():
                 self.plots.append(p)
 
         self.clear()
-        for p, v in zip(self.plots, vec):
+        for i, (p, v) in enumerate(zip(self.plots, vec)):
+            p.setPen(pg.mkPen(i, hues=max(len(vec), 9)))
             p.setData(xdata, v)
