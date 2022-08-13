@@ -1,4 +1,3 @@
-from ctypes import sizeof
 import socket
 import pickle
 import time
@@ -14,7 +13,8 @@ while True:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((ip_address, port))
 
-        v = np.arange(100, dtype=np.float64), np.random.randn(100)
+        # v = np.arange(100, dtype=np.float64), np.random.randn(100)
+        v = np.random.randn(100, 100) + np.random.randn() * 100
 
         data = pickle.dumps(v)
         header = pickle.dumps({'size': len(data)})
