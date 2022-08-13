@@ -1,11 +1,32 @@
 # socket-plotter
 
-Instant plotter via socket communication.
+Instant plotter based on `pyqtgraph` via socket communication.
 
 [![PyPI version](https://badge.fury.io/py/socket-plotter.svg)](https://badge.fury.io/py/socket-plotter) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
 ## Usage
+
+```python
+from socket_plotter import plot_lines, plot_image, plot_image_and_lines
+import numpy as np
+
+# for line plot
+xdata = np.arange(100)
+ydata = np.random.randn(100)
+plot_lines(xdata, ydata)
+
+# for image plot
+img = np.random.randn(100, 100)
+plot_image(img)
+
+# for both, the image and each row of the image are displayed.
+img = np.random.randn(100, 100)
+plot_image_and_lines(img)
+```
+
+
+### screenshots
 
 ![plot lines](https://user-images.githubusercontent.com/43668684/184507049-468e1bf5-4f3f-4cf9-87b1-f87875cbb507.png)
 
