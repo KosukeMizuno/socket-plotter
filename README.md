@@ -28,9 +28,9 @@ plot_image_and_lines(img)
 The above three functions check if a plotter process exists.
 If needed, a new plotter process will be launched before plotting.
 
-The default ports are 8765 for lineplot and 9766 for imageplot.
+The default ports are `8765` for lineplot and `8766` for imageplot.
 The default address is `127.0.0.1`.
-Other ports and address can be assigned:
+Other ports and address can be assigned as the following:
 ```python
 plot_lines(xdata, ydata, addr='<address to plotter>', port=7777)
 ```
