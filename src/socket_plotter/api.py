@@ -36,7 +36,13 @@ def plot_lines(*args,
 def plot_image(img,
                addr: str = DEFAULT_ADDR_IMAGEPLOTTER,
                port: int = DEFAULT_PORT_IMAGEPLOTTER):
-    pass
+    """Plot an image
+
+    attrs:
+    - img, 2d array_like
+    """
+    _ping_or_launch_imagplotter(addr, port)
+    _send_data(img, addr, port)
 
 
 def _ping_or_launch_lineplotter(addr: str, port: int):
@@ -50,13 +56,25 @@ def _ping_or_launch_lineplotter(addr: str, port: int):
     except ConnectionRefusedError:
         fn_entry = Path(__file__).parent / 'entry_points/lineplotter.py'
         _ = subprocess.Popen([sys.executable, fn_entry.absolute(),
-                              '--addr', addr, '--port', str(port)])
+                              '--addr', addr, '--port', str(port)],
+                             stdout=subprocess.DEVNULL,
+                             stderr=subprocess.DEVNULL)
 
 
 def _ping_or_launch_imagplotter(addr: str, port: int):
     """imageplotterがあるか確認、起動してなければ起動する
     """
-    pass
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((addr, port))
+            header = pickle.dumps({'type': 'ping'})
+            s.send(header)
+    except ConnectionRefusedError:
+        fn_entry = Path(__file__).parent / 'entry_points/imageplotter.py'
+        _ = subprocess.Popen([sys.executable, fn_entry.absolute(),
+                              '--addr', addr, '--port', str(port)],
+                             stdout=subprocess.DEVNULL,
+                             stderr=subprocess.DEVNULL)
 
 
 def _send_data(v, addr: str, port: int):

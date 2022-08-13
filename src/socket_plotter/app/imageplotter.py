@@ -7,9 +7,9 @@ from PySide2.QtWidgets import QApplication
 from .receiver import QThreadReceiver
 
 
-class LinePlotter():
+class ImagePlotter():
     DEFAULT_SIZE = (600, 400)
-    DEFAULT_TITLE = 'Line Plotter'
+    DEFAULT_TITLE = 'Image Plotter'
 
     def __init__(self, addr: str, port: int):
         self.app = QApplication([])
@@ -17,16 +17,27 @@ class LinePlotter():
         self.win.resize(*self.DEFAULT_SIZE)
         self.win.show()
 
-        self.plotitem = self.win.addPlot()
+        self.imageitem = pg.ImageItem()
+        self.imageitem.setOpts(axisOrder='row-major')
+
+        self.viewbox = self.win.addViewBox()
+        self.viewbox.setAspectLocked(lock=True)
+        self.viewbox.addItem(self.imageitem)
+
+        self.plotitem = pg.PlotItem(viewBox=self.viewbox)
         self.plotitem.showGrid(x=True, y=True)
-        self.plots: list[pg.PlotDataItem] = []
+        self.plotitem.setAspectLocked(lock=False)
+        self.win.addItem(self.plotitem)
+
+        self.histgramlutitem = pg.HistogramLUTItem(self.imageitem)
+        self.win.addItem(self.histgramlutitem)
 
         # TODO: QThread の適切な終了方法がわからん
         #       `QThread: Destroyed while thread is still running` と怒られてしまう
         # self.app.aboutToQuit.conncect(self.receiver.stop()) とかやると別の怒られが起きる
         # とりあえず放置。。。
         self.receiver = QThreadReceiver(addr, port)
-        self.receiver.sigData.connect(self.draw_unpack)
+        self.receiver.sigData.connect(self.draw)
         self.receiver.sigAttr.connect(self.set_attributes)
         self.receiver.sigError.connect(self.clear)
         self.receiver.start()
@@ -35,43 +46,17 @@ class LinePlotter():
         # TODO: xlabel, ylabel, title, windowsize などを設定できるようにしたい
         raise NotImplementedError
 
-    def draw_unpack(self, args):
-        self.draw(*args)
-
     def clear(self):
-        for p in self.plots:
-            p.setData([], [])
+        self.imageitem.clear()
 
-    def draw(self, *args):
+    def draw(self, img):
         """
         args:
-            - ydata
-            - [ydata]
-            - xdata, ydata
-            - xdata, [ydata]
-            - xdata, ydata1, ydata2
-            - xdata, ydata1, ydata2, ...
+            - img, 2d array_like
         """
-        xdata = ydata = None
-        if len(args) == 1:
-            ydata = args
-        elif len(args) == 2:
-            xdata, ydata = args
-        else:  # len(args) > 2
-            xdata = args[0]
-            ydata = args[1:]
+        vec = np.array(img)
+        if len(vec.shape) != 2:
+            self.clear()
+            return
 
-        vec = np.array(ydata)
-        if len(vec.shape) == 1:
-            vec = np.array([ydata])
-
-        if xdata is None:
-            xdata = np.arange(len(vec[0]))
-
-        if len(self.plots) < len(vec):
-            for _ in range(len(vec) - len(self.plots)):
-                p = self.plotitem.plot()
-                self.plots.append(p)
-
-        for p, v in zip(self.plots, vec):
-            p.setData(xdata, v)
+        self.imageitem.setImage(vec)
