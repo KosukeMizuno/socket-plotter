@@ -8,17 +8,15 @@ import pickle
 import subprocess
 from pathlib import Path
 
-DEFAULT_ADDR_LINEPLOTTER = '127.0.0.1'
+DEFAULT_ADDR = '127.0.0.1'
 DEFAULT_PORT_LINEPLOTTER = 8765
-
-DEFAULT_ADDR_IMAGEPLOTTER = '127.0.0.1'
 DEFAULT_PORT_IMAGEPLOTTER = 8766
 
 
 def plot_lines(*args,
                xlabel: Optional[str] = None, ylabel: Optional[str] = None,
                windowsize: Optional[tuple[int, int]] = None,
-               addr: str = DEFAULT_ADDR_LINEPLOTTER,
+               addr: str = DEFAULT_ADDR,
                port: int = DEFAULT_PORT_LINEPLOTTER):
     """
     args:
@@ -40,7 +38,7 @@ def plot_lines(*args,
 def plot_image(img,
                xlabel: Optional[str] = None, ylabel: Optional[str] = None,
                windowsize: Optional[tuple[int, int]] = None,
-               addr: str = DEFAULT_ADDR_IMAGEPLOTTER,
+               addr: str = DEFAULT_ADDR,
                port: int = DEFAULT_PORT_IMAGEPLOTTER):
     """Plot an image
 
@@ -57,17 +55,18 @@ def plot_image(img,
     _send_attrs(addr, port, attrs)
 
 
-def plot_image_with_traces(img,
-                           xlabel: Optional[str] = None, ylabel: Optional[str] = None,
-                           windowsize: Optional[tuple[int, int]] = None,
-                           addr: str = DEFAULT_ADDR_IMAGEPLOTTER,
-                           port: int = DEFAULT_PORT_IMAGEPLOTTER):
+def plot_image_and_lines(img,
+                         xlabel: Optional[str] = None, ylabel: Optional[str] = None,
+                         windowsize: Optional[tuple[int, int]] = None,
+                         addr: str = DEFAULT_ADDR,
+                         port_image: int = DEFAULT_PORT_IMAGEPLOTTER,
+                         port_lines: int = DEFAULT_PORT_LINEPLOTTER):
     """Plot an image, and plot each row of the image
     """
     plot_image(img, xlabel=xlabel, ylabel=ylabel, windowsize=windowsize,
-               addr=addr, port=port)
+               addr=addr, port=port_image)
     plot_lines(img, xlabel=xlabel,
-               addr=addr, port=port)
+               addr=addr, port=port_lines)
 
 
 def _ping_or_launch_lineplotter(addr: str, port: int):
