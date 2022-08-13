@@ -31,6 +31,7 @@ class LinePlotter():
         self.receiver.start()
 
     def set_attributes(attrs):
+        # TODO: xlabel, ylabel, title などを設定できるようにしたい
         raise NotImplementedError
 
     def draw_unpack(self, args):
