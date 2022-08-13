@@ -9,7 +9,7 @@ from socket_plotter.app.imageplotter import ImagePlotter
 
 
 def run(addr: str, port: int):
-    plotter = ImagePlotter(addr, port)
+    _ = ImagePlotter(addr, port)
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
         QApplication.instance().exec_()
 

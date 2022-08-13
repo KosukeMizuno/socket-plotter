@@ -42,9 +42,13 @@ class ImagePlotter():
         self.receiver.sigError.connect(self.clear)
         self.receiver.start()
 
-    def set_attributes(attrs):
-        # TODO: xlabel, ylabel, title, windowsize などを設定できるようにしたい
-        raise NotImplementedError
+    def set_attributes(self, attrs: dict):
+        if 'xlabel' in attrs:
+            self.plotitem.setLabel('bottom', attrs['xlabel'])
+        if 'ylabel' in attrs:
+            self.plotitem.setLabel('left', attrs['ylabel'])
+        if 'windowsize' in attrs:
+            self.win.resize(*attrs['windowsize'])
 
     def clear(self):
         self.imageitem.clear()

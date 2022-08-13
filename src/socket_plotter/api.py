@@ -1,4 +1,6 @@
 from __future__ import annotations
+from audioop import add
+from typing import Optional
 
 import sys
 import socket
@@ -14,6 +16,8 @@ DEFAULT_PORT_IMAGEPLOTTER = 8766
 
 
 def plot_lines(*args,
+               xlabel: Optional[str] = None, ylabel: Optional[str] = None,
+               windowsize: Optional[tuple[int, int]] = None,
                addr: str = DEFAULT_ADDR_LINEPLOTTER,
                port: int = DEFAULT_PORT_LINEPLOTTER):
     """
@@ -26,23 +30,47 @@ def plot_lines(*args,
         - xdata, ydata1, ydata2, ...
 
     TODO: 上記のように受け付けてないので要修正, ydataをそのまま送る分にはOK
-
-    # TODO: xlabel, ylabel, title などを設定できるようにしたい
+    TODO: 複数ラインを受けたときに適切に色を変えてプロットしたい
     """
     _ping_or_launch_lineplotter(addr, port)
+
     _send_data(args, addr, port)
+
+    attrs = dict(xlabel=xlabel, ylabel=ylabel, windowsize=windowsize)
+    _send_attrs(addr, port, attrs)
 
 
 def plot_image(img,
+               xlabel: Optional[str] = None, ylabel: Optional[str] = None,
+               windowsize: Optional[tuple[int, int]] = None,
                addr: str = DEFAULT_ADDR_IMAGEPLOTTER,
                port: int = DEFAULT_PORT_IMAGEPLOTTER):
     """Plot an image
 
     attrs:
     - img, 2d array_like
+
+    TODO: xaxis, yaxisを受け入れる
     """
     _ping_or_launch_imagplotter(addr, port)
+
     _send_data(img, addr, port)
+
+    attrs = dict(xlabel=xlabel, ylabel=ylabel, windowsize=windowsize)
+    _send_attrs(addr, port, attrs)
+
+
+def plot_image_with_traces(img,
+                           xlabel: Optional[str] = None, ylabel: Optional[str] = None,
+                           windowsize: Optional[tuple[int, int]] = None,
+                           addr: str = DEFAULT_ADDR_IMAGEPLOTTER,
+                           port: int = DEFAULT_PORT_IMAGEPLOTTER):
+    """Plot an image, and plot each row of the image
+    """
+    plot_image(img, xlabel=xlabel, ylabel=ylabel, windowsize=windowsize,
+               addr=addr, port=port)
+    plot_lines(img, xlabel=xlabel,
+               addr=addr, port=port)
 
 
 def _ping_or_launch_lineplotter(addr: str, port: int):
@@ -89,7 +117,16 @@ def _send_data(v, addr: str, port: int):
         s.sendall(data)
 
 
-if __name__ == '__main__':
-    # test code
-    import numpy as np
-    plot_lines(np.random.randn(100))
+def _send_attrs(addr: str, port: int, attrs: dict):
+    if not any(attrs.values()):
+        return
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((addr, port))
+
+        data = pickle.dumps(attrs)
+        header = pickle.dumps({'size': len(data), 'type': 'attr'})
+
+        s.send(header)
+        _ = s.recv(2048)
+        s.sendall(data)

@@ -9,15 +9,15 @@ from .receiver import QThreadReceiver
 
 class LinePlotter():
     DEFAULT_SIZE = (600, 400)
-    DEFAULT_TITLE = 'Line Plotter'
+    DEFAULT_WINDOW_TITLE = 'Line Plotter'
 
     def __init__(self, addr: str, port: int):
         self.app = QApplication([])
-        self.win = pg.GraphicsLayoutWidget(title=self.DEFAULT_TITLE)
+        self.win = pg.GraphicsLayoutWidget(title=self.DEFAULT_WINDOW_TITLE)
         self.win.resize(*self.DEFAULT_SIZE)
         self.win.show()
 
-        self.plotitem = self.win.addPlot()
+        self.plotitem: pg.PlotItem = self.win.addPlot()
         self.plotitem.showGrid(x=True, y=True)
         self.plots: list[pg.PlotDataItem] = []
 
@@ -31,9 +31,13 @@ class LinePlotter():
         self.receiver.sigError.connect(self.clear)
         self.receiver.start()
 
-    def set_attributes(attrs):
-        # TODO: xlabel, ylabel, title, windowsize などを設定できるようにしたい
-        raise NotImplementedError
+    def set_attributes(self, attrs: dict):
+        if attrs.get('xlabel', None):
+            self.plotitem.setLabel('bottom', attrs['xlabel'])
+        if attrs.get('ylabel', None):
+            self.plotitem.setLabel('left', attrs['ylabel'])
+        if attrs.get('windowsize', None):
+            self.win.resize(*attrs['windowsize'])
 
     def draw_unpack(self, args):
         self.draw(*args)

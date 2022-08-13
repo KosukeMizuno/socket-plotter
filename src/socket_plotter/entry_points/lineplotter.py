@@ -9,7 +9,7 @@ from socket_plotter.app.lineplotter import LinePlotter
 
 
 def run(addr: str, port: int):
-    plotter = LinePlotter(addr, port)
+    _ = LinePlotter(addr, port)
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
         QApplication.instance().exec_()
 
