@@ -58,7 +58,7 @@ class LinePlotter():
         """
         xdata = ydata = None
         if len(args) == 1:
-            ydata = args
+            ydata = args[0]
         elif len(args) == 2:
             xdata, ydata = args
         else:  # len(args) > 2
@@ -67,7 +67,7 @@ class LinePlotter():
 
         vec = np.array(ydata)
         if len(vec.shape) == 1:
-            vec = np.array([ydata])
+            vec = [vec]
 
         if xdata is None:
             xdata = np.arange(len(vec[0]))
@@ -77,5 +77,6 @@ class LinePlotter():
                 p = self.plotitem.plot()
                 self.plots.append(p)
 
+        self.clear()
         for p, v in zip(self.plots, vec):
             p.setData(xdata, v)
