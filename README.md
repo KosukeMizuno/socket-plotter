@@ -5,6 +5,13 @@ Instant plotter based on `pyqtgraph` via socket communication.
 [![PyPI version](https://badge.fury.io/py/socket-plotter.svg)](https://badge.fury.io/py/socket-plotter) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
+## Installation
+
+1. install PySide2 manually
+    - `pip install PySide2` or `conda install -c conda-forge pyside2`
+2. `pip install socket-plotter`
+
+
 ## Usage
 
 ```python
@@ -40,6 +47,9 @@ plot_image_and_lines(img)
 - numpy
 
 ## Change log
+### [0.1.1]
+- removed PySide2 from `install_requires` to avoid automatic installation by package managers for compatibility for pip and anaconda environments
+
 ### [0.1.0]
 - released
 
