@@ -1,7 +1,7 @@
 from __future__ import annotations
-from audioop import add
 from typing import Optional
 
+import os
 import sys
 import socket
 import pickle
@@ -79,7 +79,7 @@ def _ping_or_launch_lineplotter(addr: str, port: int):
             s.send(header)
     except ConnectionRefusedError:
         fn_entry = Path(__file__).parent / 'entry_points/lineplotter.py'
-        _ = subprocess.Popen([sys.executable, fn_entry.absolute(),
+        _ = subprocess.Popen([_get_executable(), str(fn_entry.absolute()),
                               '--addr', addr, '--port', str(port)],
                              stdout=subprocess.DEVNULL,
                              stderr=subprocess.DEVNULL)
@@ -95,7 +95,7 @@ def _ping_or_launch_imagplotter(addr: str, port: int):
             s.send(header)
     except ConnectionRefusedError:
         fn_entry = Path(__file__).parent / 'entry_points/imageplotter.py'
-        _ = subprocess.Popen([sys.executable, fn_entry.absolute(),
+        _ = subprocess.Popen([_get_executable(), str(fn_entry.absolute()),
                               '--addr', addr, '--port', str(port)],
                              stdout=subprocess.DEVNULL,
                              stderr=subprocess.DEVNULL)
@@ -126,3 +126,13 @@ def _send_attrs(addr: str, port: int, attrs: dict):
         s.send(header)
         _ = s.recv(2048)
         s.sendall(data)
+
+
+def _get_executable() -> str:
+    KEY_EXE = 'SOCKETPLOTTER_PYTHON_EXECUTABLE'
+    if KEY_EXE in os.environ:
+        p = Path(os.environ[KEY_EXE])
+        if p.exists():
+            return str(p)
+
+    return sys.executable

@@ -42,6 +42,8 @@ Other ports and address can be assigned as the following:
 plot_lines(xdata, ydata, addr='<address to plotter>', port=7777)
 ```
 
+You can specify your python executable to launch plotter GUIs via an environment variable `SOCKETPLOTTER_PYTHON_EXECUTABLE`
+
 
 ### screenshots
 
@@ -57,6 +59,9 @@ plot_lines(xdata, ydata, addr='<address to plotter>', port=7777)
 - numpy
 
 ## Change log
+### [0.1.2]
+- executable switch via `SOCKETPLOTTER_PYTHON_EXECUTABLE`
+
 ### [0.1.1]
 - removed PySide2 from `install_requires` to avoid automatic installation by package managers for compatibility for pip and anaconda environments
 

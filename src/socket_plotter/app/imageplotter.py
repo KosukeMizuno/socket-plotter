@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from PySide2.QtWidgets import QApplication
 import numpy as np
 import pyqtgraph as pg
-from PySide2.QtWidgets import QApplication
 
 from .receiver import QThreadReceiver
 
