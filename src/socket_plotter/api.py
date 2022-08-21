@@ -4,6 +4,7 @@ from typing import Optional
 import os
 import sys
 import socket
+import json
 import pickle
 import subprocess
 from pathlib import Path
@@ -75,7 +76,7 @@ def _ping_or_launch_lineplotter(addr: str, port: int):
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((addr, port))
-            header = pickle.dumps({'type': 'ping'})
+            header = json.dumps({'type': 'ping'}).encode('utf-8')
             s.send(header)
     except ConnectionRefusedError:
         fn_entry = Path(__file__).parent / 'entry_points/lineplotter.py'
@@ -91,7 +92,7 @@ def _ping_or_launch_imagplotter(addr: str, port: int):
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((addr, port))
-            header = pickle.dumps({'type': 'ping'})
+            header = json.dumps({'type': 'ping'}).encode('utf-8')
             s.send(header)
     except ConnectionRefusedError:
         fn_entry = Path(__file__).parent / 'entry_points/imageplotter.py'
@@ -106,7 +107,7 @@ def _send_data(v, addr: str, port: int):
         s.connect((addr, port))
 
         data = pickle.dumps(v)
-        header = pickle.dumps({'size': len(data), 'type': 'data'})
+        header = json.dumps({'size': len(data), 'type': 'data'}).encode('utf-8')
 
         s.send(header)
         _ = s.recv(2048)
@@ -121,7 +122,7 @@ def _send_attrs(addr: str, port: int, attrs: dict):
         s.connect((addr, port))
 
         data = pickle.dumps(attrs)
-        header = pickle.dumps({'size': len(data), 'type': 'attr'})
+        header = json.dumps({'size': len(data), 'type': 'attr'}).encode('utf-8')
 
         s.send(header)
         _ = s.recv(2048)

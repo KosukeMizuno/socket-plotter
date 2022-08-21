@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Any
 
 import socket
+import json
 import pickle
 
 from PySide2 import QtCore
@@ -9,13 +10,14 @@ from PySide2 import QtCore
 
 class QThreadReceiver(QtCore.QThread):
     """
-    1. 接続を受けたら、以下のようなdict (header) を受け取る
-        {'size': int, 'type': Literal['data', 'attr', 'ping']}
+    1. 接続を受けたら、以下のようなdict (header) をjsonで受け取る
+        {'size': int, 'type': Literal['data', 'data_json', 'attr', 'ping']}
         - type==ping なら何もせずに次の接続をまつ
-        - TODO: headerはjsonで受けて、データ自体もjsonで受けるモードを作りたい。現状だとpython限定だしバージョン合わせの問題が出るかも
     2. `A header was received.` と返す
     3. (1)で受けたサイズだけデータを受け取る
-    4. type==data ならsigDataでui側へ渡す。type==attrならsigAttrでui側へ渡す
+    4. type==(data|data_json) ならsigDataでui側へ渡す。type==attrならsigAttrでui側へ渡す
+      - data|attr だったらデータをpickleで受け取る
+      - data_json だった場合はデータをjsonで受け取る
 
     途中でエラーしたら sigErrorを発してui側へ通知
     """
@@ -47,7 +49,7 @@ class QThreadReceiver(QtCore.QThread):
         while self._flg_listen:
             try:
                 type, dat = self._recv()
-                if type == 'data':
+                if type in ('data', 'data_json'):
                     self.sigData.emit(dat)
                 elif type == 'attr':
                     self.sigAttr.emit(dat)
@@ -62,6 +64,8 @@ class QThreadReceiver(QtCore.QThread):
                 self.sigError.emit()
             except pickle.UnpicklingError:
                 self.sigError.emit()
+            except json.JSONDecodeError:
+                self.sigError.emit()
 
         self.s.close()
 
@@ -69,13 +73,17 @@ class QThreadReceiver(QtCore.QThread):
         conn, _ = self.s.accept()
         with conn:
             header_bytes = conn.recv(self.buffer_size)
-            header = pickle.loads(header_bytes)
+            header = json.loads(header_bytes)
             if header['type'] == 'ping':
                 return 'ping', None
 
+            # receiving body
             conn.send(b'A header was received.')
 
             databuf = bytearray(header['size'])
             conn.recv_into(databuf)
 
-        return header['type'], pickle.loads(databuf)
+        if header['type'] == 'data_json':
+            return header['type'], json.loads(databuf)
+        else:
+            return header['type'], pickle.loads(databuf)
