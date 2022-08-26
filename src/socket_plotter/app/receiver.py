@@ -14,13 +14,13 @@ class QThreadReceiver(QtCore.QThread):
     The communication protocol is as the followings:
 
     1. Wait a connection
-    2. Receive a header in json format
-       ````json
-       {
-         "size": int,
-         "type": Literal['data', 'data_json', 'attr', 'ping']
-       }
-       ````
+    2. Receive a header in json format ::
+
+            {
+                "size": int,
+                "type": Literal['data', 'data_json', 'attr', 'ping']
+            }
+
        If `type==ping`, do nothing. Go to (1).
     3. Return a string, `A header was received.`
     4. Receive `size` bytes.

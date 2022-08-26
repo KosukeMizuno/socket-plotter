@@ -66,6 +66,7 @@ You can specify your python executable to launch plotter GUIs via an environment
 ## Change log
 ### wip
 - add docstrings
+- add sphinx documentation
 
 ### [0.1.3]
 - headers should be json-formatted.
