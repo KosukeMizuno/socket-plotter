@@ -48,7 +48,7 @@ class LinePlotter():
         """wrapper for signal communication.
 
         This function receives a sequence object.
-        The object will be unpacked and pass to `draw`.
+        The object will be unpacked and pass to ``draw``.
 
         Args:
             args (Sequence[Any]): an object to be unpacked.
@@ -58,13 +58,14 @@ class LinePlotter():
     def draw(self, *dat):
         """Plot a line or lines.
 
-        The structure of `dat` will be automatically determined.
-        `dat` should be in the following forms:
-        - ydata
-        - [ydata]
-        - xdata, ydata
-        - xdata, [ydata]
-        - xdata, ydata1, ydata2, ...
+        The structure of ``dat`` will be automatically determined.
+        ``dat`` should be in the following forms:
+
+        - ``ydata``
+        - ``[ydata]``
+        - ``xdata, ydata``
+        - ``xdata, [ydata]``
+        - ``xdata, ydata1, ydata2, ...``
 
         If socket connection is refused, a new plotter will be launched.
 

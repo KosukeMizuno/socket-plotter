@@ -2,7 +2,7 @@
 
 - This module exposes some functions to launch plotter GUIs (if needed) and to send data.
 - A python executable to launch a GUI can be assign
-  with `SOCKETPLOTTER_PYTHON_EXECUTABLE` environment variable.
+  with ``SOCKETPLOTTER_PYTHON_EXECUTABLE`` environment variable.
   If it's not set, the GUI is launched with the same executable calling the api functions.
 """
 from __future__ import annotations
@@ -28,13 +28,14 @@ def plot_lines(*dat,
                port: int = DEFAULT_PORT_LINEPLOTTER):
     """Plot a line or lines.
 
-    The structure of `dat` will be automatically determined.
-    `dat` should be in the following forms:
-    - ydata
-    - [ydata]
-    - xdata, ydata
-    - xdata, [ydata]
-    - xdata, ydata1, ydata2, ...
+    The structure of ``dat`` will be automatically determined.
+    ``dat`` should be in the following forms:
+    
+    - ``ydata``
+    - ``[ydata]``
+    - ``xdata, ydata``
+    - ``xdata, [ydata]``
+    - ``xdata, ydata1, ydata2, ...``
 
     If socket connection is refused, a new plotter will be launched.
 
@@ -165,7 +166,7 @@ def _send_data(v: Any, addr: str, port: int):
 def _send_attrs(addr: str, port: int, attrs: dict):
     """Send attributes to the plotter.
 
-    If all items of `attrs` are None, this function does nothing.
+    If all items of ``attrs`` are None, this function does nothing.
 
     Args:
         addr (str): Address of the plotter.

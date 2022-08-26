@@ -56,7 +56,7 @@ class ImagePlotter():
     def draw(self, img):
         """Draw the image.
 
-        If `img` is not 2-dimensional, do nothing.
+        If ``img`` is not 2-dimensional, do nothing.
 
         Args:
             img (2d array_like): an image to be drawn.

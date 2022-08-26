@@ -14,25 +14,25 @@ class QThreadReceiver(QtCore.QThread):
     The communication protocol is as the followings:
 
     1. Wait a connection
-    2. Receive a header in json format ::
+    2. Receive a header in json format like: ::
 
             {
                 "size": int,
                 "type": Literal['data', 'data_json', 'attr', 'ping']
             }
 
-       If `type==ping`, do nothing. Go to (1).
-    3. Return a string, `A header was received.`
-    4. Receive `size` bytes.
-       If `type==data_json`, a json-formatted data is coming.
-       Otherwise, the incoming object is deserialized by `pickle.loads`.
+       If ``type==ping``, do nothing. Go to (1).
+    3. Return a string, ``A header was received.``
+    4. Receive ``size`` bytes.
+       If ``type==data_json``, a json-formatted data is coming.
+       Otherwise, the incoming object is deserialized by ``pickle.loads``.
 
     When the above protocol finishes properly, the received object will
     be passed to the received object to the plotter.
-    - If `type==data or data_json`, using `sigData`.
-    - If `type==attr`, using `sigAttr`.
+    - If ``type==data or data_json``, using ``sigData``.
+    - If ``type==attr``, using ``sigAttr``.
 
-    When an error occurs during a protocol, `sigError` will be emitted.
+    When an error occurs during a protocol, ``sigError`` will be emitted.
     """
     buffer_size = 2048
     timeout = 0.1
