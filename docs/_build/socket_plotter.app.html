@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>socket_plotter.app package &mdash; socket-plotter v0.1.4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="socket_plotter package" href="socket_plotter.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> socket-plotter
+          </a>
+              <div class="version">
+                v0.1.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="socket_plotter.html">socket_plotter package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="socket_plotter.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">socket_plotter.app package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-socket_plotter.app.imageplotter">socket_plotter.app.imageplotter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-socket_plotter.app.lineplotter">socket_plotter.app.lineplotter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-socket_plotter.app.receiver">socket_plotter.app.receiver module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-socket_plotter.app">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="socket_plotter.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socket_plotter.html#module-socket_plotter.api">socket_plotter.api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socket_plotter.html#module-socket_plotter">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">socket-plotter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="socket_plotter.html">socket_plotter package</a> &raquo;</li>
+      <li>socket_plotter.app package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/socket_plotter.app.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="socket-plotter-app-package">
+<h1>socket_plotter.app package<a class="headerlink" href="#socket-plotter-app-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-socket_plotter.app.imageplotter">
+<span id="socket-plotter-app-imageplotter-module"></span><h2>socket_plotter.app.imageplotter module<a class="headerlink" href="#module-socket_plotter.app.imageplotter" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="socket_plotter.app.imageplotter.ImagePlotter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">socket_plotter.app.imageplotter.</span></span><span class="sig-name descname"><span class="pre">ImagePlotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/socket_plotter/app/imageplotter.html#ImagePlotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socket_plotter.app.imageplotter.ImagePlotter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socket_plotter.app.imageplotter.ImagePlotter.DEFAULT_SIZE">
+<span class="sig-name descname"><span class="pre">DEFAULT_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(600,</span> <span class="pre">400)</span></em><a class="headerlink" href="#socket_plotter.app.imageplotter.ImagePlotter.DEFAULT_SIZE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socket_plotter.app.imageplotter.ImagePlotter.DEFAULT_TITLE">
+<span class="sig-name descname"><span class="pre">DEFAULT_TITLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Image</span> <span class="pre">Plotter'</span></em><a class="headerlink" href="#socket_plotter.app.imageplotter.ImagePlotter.DEFAULT_TITLE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="socket_plotter.app.imageplotter.ImagePlotter.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/socket_plotter/app/imageplotter.html#ImagePlotter.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socket_plotter.app.imageplotter.ImagePlotter.clear" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="socket_plotter.app.imageplotter.ImagePlotter.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/socket_plotter/app/imageplotter.html#ImagePlotter.draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socket_plotter.app.imageplotter.ImagePlotter.draw" title="Permalink to this definition"></a></dt>
+<dd><p>Draw the image.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">img</span></code> is not 2-dimensional, do nothing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>img</strong> (<em>2d array_like</em>) – an image to be drawn.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="socket_plotter.app.imageplotter.ImagePlotter.set_attributes">
+<span class="sig-name descname"><span class="pre">set_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/socket_plotter/app/imageplotter.html#ImagePlotter.set_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socket_plotter.app.imageplotter.ImagePlotter.set_attributes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-socket_plotter.app.lineplotter">
+<span id="socket-plotter-app-lineplotter-module"></span><h2>socket_plotter.app.lineplotter module<a class="headerlink" href="#module-socket_plotter.app.lineplotter" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="socket_plotter.app.lineplotter.LinePlotter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">socket_plotter.app.lineplotter.</span></span><span class="sig-name descname"><span class="pre">LinePlotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/socket_plotter/app/lineplotter.html#LinePlotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socket_plotter.app.lineplotter.LinePlotter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socket_plotter.app.lineplotter.LinePlotter.DEFAULT_SIZE">
+<span class="sig-name descname"><span class="pre">DEFAULT_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(600,</span> <span class="pre">400)</span></em><a class="headerlink" href="#socket_plotter.app.lineplotter.LinePlotter.DEFAULT_SIZE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socket_plotter.app.lineplotter.LinePlotter.DEFAULT_WINDOW_TITLE">
+<span class="sig-name descname"><span class="pre">DEFAULT_WINDOW_TITLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Line</span> <span class="pre">Plotter'</span></em><a class="headerlink" href="#socket_plotter.app.lineplotter.LinePlotter.DEFAULT_WINDOW_TITLE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="socket_plotter.app.lineplotter.LinePlotter.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/socket_plotter/app/lineplotter.html#LinePlotter.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socket_plotter.app.lineplotter.LinePlotter.clear" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="socket_plotter.app.lineplotter.LinePlotter.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">dat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/socket_plotter/app/lineplotter.html#LinePlotter.draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socket_plotter.app.lineplotter.LinePlotter.draw" title="Permalink to this definition"></a></dt>
+<dd><p>Plot a line or lines.</p>
+<p>The structure of <code class="docutils literal notranslate"><span class="pre">dat</span></code> will be automatically determined.
+<code class="docutils literal notranslate"><span class="pre">dat</span></code> should be in the following forms:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ydata</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[ydata]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xdata,</span> <span class="pre">ydata</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xdata,</span> <span class="pre">[ydata]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xdata,</span> <span class="pre">ydata1,</span> <span class="pre">ydata2,</span> <span class="pre">...</span></code></p></li>
+</ul>
+<p>If socket connection is refused, a new plotter will be launched.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*dat</strong> – data to be plotted. See the above note.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="socket_plotter.app.lineplotter.LinePlotter.draw_unpack">
+<span class="sig-name descname"><span class="pre">draw_unpack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/socket_plotter/app/lineplotter.html#LinePlotter.draw_unpack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socket_plotter.app.lineplotter.LinePlotter.draw_unpack" title="Permalink to this definition"></a></dt>
+<dd><p>wrapper for signal communication.</p>
+<p>This function receives a sequence object.
+The object will be unpacked and pass to <code class="docutils literal notranslate"><span class="pre">draw</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>Sequence</em><em>[</em><em>Any</em><em>]</em>) – an object to be unpacked.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="socket_plotter.app.lineplotter.LinePlotter.set_attributes">
+<span class="sig-name descname"><span class="pre">set_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/socket_plotter/app/lineplotter.html#LinePlotter.set_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socket_plotter.app.lineplotter.LinePlotter.set_attributes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-socket_plotter.app.receiver">
+<span id="socket-plotter-app-receiver-module"></span><h2>socket_plotter.app.receiver module<a class="headerlink" href="#module-socket_plotter.app.receiver" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="socket_plotter.app.receiver.QThreadReceiver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">socket_plotter.app.receiver.</span></span><span class="sig-name descname"><span class="pre">QThreadReceiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/socket_plotter/app/receiver.html#QThreadReceiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socket_plotter.app.receiver.QThreadReceiver" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></p>
+<p>QThread as a socket-receiver</p>
+<p>The communication protocol is as the followings:</p>
+<ol class="arabic">
+<li><p>Wait a connection</p></li>
+<li><p>Receive a header in json format like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;data_json&#39;</span><span class="p">,</span> <span class="s1">&#39;attr&#39;</span><span class="p">,</span> <span class="s1">&#39;ping&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">type==ping</span></code>, do nothing. Go to (1).</p>
+</li>
+<li><p>Return a string, <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">header</span> <span class="pre">was</span> <span class="pre">received.</span></code></p></li>
+<li><p>Receive <code class="docutils literal notranslate"><span class="pre">size</span></code> bytes.
+If <code class="docutils literal notranslate"><span class="pre">type==data_json</span></code>, a json-formatted data is coming.
+Otherwise, the incoming object is deserialized by <code class="docutils literal notranslate"><span class="pre">pickle.loads</span></code>.</p></li>
+</ol>
+<p>When the above protocol finishes properly, the received object will
+be passed to the received object to the plotter.
+- If <code class="docutils literal notranslate"><span class="pre">type==data</span> <span class="pre">or</span> <span class="pre">data_json</span></code>, using <code class="docutils literal notranslate"><span class="pre">sigData</span></code>.
+- If <code class="docutils literal notranslate"><span class="pre">type==attr</span></code>, using <code class="docutils literal notranslate"><span class="pre">sigAttr</span></code>.</p>
+<p>When an error occurs during a protocol, <code class="docutils literal notranslate"><span class="pre">sigError</span></code> will be emitted.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socket_plotter.app.receiver.QThreadReceiver.buffer_size">
+<span class="sig-name descname"><span class="pre">buffer_size</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2048</span></em><a class="headerlink" href="#socket_plotter.app.receiver.QThreadReceiver.buffer_size" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="socket_plotter.app.receiver.QThreadReceiver.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/socket_plotter/app/receiver.html#QThreadReceiver.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socket_plotter.app.receiver.QThreadReceiver.run" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socket_plotter.app.receiver.QThreadReceiver.sigAttr">
+<span class="sig-name descname"><span class="pre">sigAttr</span></span><a class="headerlink" href="#socket_plotter.app.receiver.QThreadReceiver.sigAttr" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socket_plotter.app.receiver.QThreadReceiver.sigData">
+<span class="sig-name descname"><span class="pre">sigData</span></span><a class="headerlink" href="#socket_plotter.app.receiver.QThreadReceiver.sigData" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socket_plotter.app.receiver.QThreadReceiver.sigError">
+<span class="sig-name descname"><span class="pre">sigError</span></span><a class="headerlink" href="#socket_plotter.app.receiver.QThreadReceiver.sigError" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socket_plotter.app.receiver.QThreadReceiver.staticMetaObject">
+<span class="sig-name descname"><span class="pre">staticMetaObject</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;PySide2.QtCore.QMetaObject</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#socket_plotter.app.receiver.QThreadReceiver.staticMetaObject" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="socket_plotter.app.receiver.QThreadReceiver.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/socket_plotter/app/receiver.html#QThreadReceiver.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socket_plotter.app.receiver.QThreadReceiver.stop" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socket_plotter.app.receiver.QThreadReceiver.timeout">
+<span class="sig-name descname"><span class="pre">timeout</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.1</span></em><a class="headerlink" href="#socket_plotter.app.receiver.QThreadReceiver.timeout" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-socket_plotter.app">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-socket_plotter.app" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="socket_plotter.html" class="btn btn-neutral float-left" title="socket_plotter package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kosuke Mizuno.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

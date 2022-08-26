@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>socket_plotter.api &mdash; socket-plotter v0.1.4 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> socket-plotter
+          </a>
+              <div class="version">
+                v0.1.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../socket_plotter.html">socket_plotter package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">socket-plotter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>socket_plotter.api</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for socket_plotter.api</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;APIs for socket-plotter</span>
+
+<span class="sd">- This module exposes some functions to launch plotter GUIs (if needed) and to send data.</span>
+<span class="sd">- A python executable to launch a GUI can be assign</span>
+<span class="sd">  with ``SOCKETPLOTTER_PYTHON_EXECUTABLE`` environment variable.</span>
+<span class="sd">  If it&#39;s not set, the GUI is launched with the same executable calling the api functions.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">DEFAULT_ADDR</span> <span class="o">=</span> <span class="s1">&#39;127.0.0.1&#39;</span>
+<span class="n">DEFAULT_PORT_LINEPLOTTER</span> <span class="o">=</span> <span class="mi">8765</span>
+<span class="n">DEFAULT_PORT_IMAGEPLOTTER</span> <span class="o">=</span> <span class="mi">8766</span>
+
+
+<div class="viewcode-block" id="plot_lines"><a class="viewcode-back" href="../../socket_plotter.html#socket_plotter.api.plot_lines">[docs]</a><span class="k">def</span> <span class="nf">plot_lines</span><span class="p">(</span><span class="o">*</span><span class="n">dat</span><span class="p">,</span>
+               <span class="n">xlabel</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+               <span class="n">windowsize</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+               <span class="n">addr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_ADDR</span><span class="p">,</span>
+               <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_PORT_LINEPLOTTER</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plot a line or lines.</span>
+
+<span class="sd">    The structure of ``dat`` will be automatically determined.</span>
+<span class="sd">    ``dat`` should be in the following forms:</span>
+
+<span class="sd">    - ``ydata``</span>
+<span class="sd">    - ``[ydata]``</span>
+<span class="sd">    - ``xdata, ydata``</span>
+<span class="sd">    - ``xdata, [ydata]``</span>
+<span class="sd">    - ``xdata, ydata1, ydata2, ...``</span>
+
+<span class="sd">    If socket connection is refused, a new plotter will be launched.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        *dat: data to be plotted. See the above note.</span>
+<span class="sd">        xlabel (str, optional): Defaults to None.</span>
+<span class="sd">        ylabel (str, optional): Defaults to None.</span>
+<span class="sd">        windowsize (tuple[int, int], optional): Defaults to None.</span>
+<span class="sd">        addr (str): Address of the plotter. Defaults to DEFAULT_ADDR.</span>
+<span class="sd">        port (int): Port of the plotter. Defaults to DEFAULT_PORT_LINEPLOTTER.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_ping_or_launch_lineplotter</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+
+    <span class="n">_send_data</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+
+    <span class="n">attrs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">windowsize</span><span class="o">=</span><span class="n">windowsize</span><span class="p">)</span>
+    <span class="n">_send_attrs</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="plot_image"><a class="viewcode-back" href="../../socket_plotter.html#socket_plotter.api.plot_image">[docs]</a><span class="k">def</span> <span class="nf">plot_image</span><span class="p">(</span><span class="n">img</span><span class="p">,</span>
+               <span class="n">xlabel</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+               <span class="n">windowsize</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+               <span class="n">addr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_ADDR</span><span class="p">,</span>
+               <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_PORT_IMAGEPLOTTER</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plot an image.</span>
+
+<span class="sd">    If socket connection is refused, a new plotter will be launched.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        img (2d-ndarray): image to be plotted.</span>
+<span class="sd">        xlabel (str, optional): Defaults to None.</span>
+<span class="sd">        ylabel (str, optional): Defaults to None.</span>
+<span class="sd">        windowsize (tuple[int, int], optional): Defaults to None.</span>
+<span class="sd">        addr (str): Address of the plotter. Defaults to DEFAULT_ADDR.</span>
+<span class="sd">        port (int): Port of the plotter. Defaults to DEFAULT_PORT_IMAGEPLOTTER.</span>
+
+<span class="sd">    TODO:</span>
+<span class="sd">        xaxis, yaxis を受け入れる</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_ping_or_launch_imageplotter</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+
+    <span class="n">_send_data</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+
+    <span class="n">attrs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">windowsize</span><span class="o">=</span><span class="n">windowsize</span><span class="p">)</span>
+    <span class="n">_send_attrs</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="plot_image_and_lines"><a class="viewcode-back" href="../../socket_plotter.html#socket_plotter.api.plot_image_and_lines">[docs]</a><span class="k">def</span> <span class="nf">plot_image_and_lines</span><span class="p">(</span><span class="n">img</span><span class="p">,</span>
+                         <span class="n">addr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_ADDR</span><span class="p">,</span>
+                         <span class="n">port_image</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_PORT_IMAGEPLOTTER</span><span class="p">,</span>
+                         <span class="n">port_lines</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_PORT_LINEPLOTTER</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plot an image, and plot each row of the image</span>
+
+<span class="sd">    If socket connection is refused, a new plotter will be launched.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        img (2d-ndarray): image to be plotted.</span>
+<span class="sd">        addr (str): Address of the plotter. Defaults to DEFAULT_ADDR.</span>
+<span class="sd">        port_image (int): Port of the image plotter. Defaults to DEFAULT_PORT_IMAGEPLOTTER.</span>
+<span class="sd">        port_lines (int): Port of the line plotter. Defaults to DEFAULT_PORT_LINEPLOTTER.</span>
+
+<span class="sd">    TODO:</span>
+<span class="sd">        xlabel,ylabelなどを受け入れる</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plot_image</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="n">addr</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port_image</span><span class="p">)</span>
+    <span class="n">plot_lines</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="n">addr</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port_lines</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_ping_or_launch_lineplotter</span><span class="p">(</span><span class="n">addr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Try to connect a lineplotter. If refused, this launches a new plotter.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        addr (str): Address of the plotter. Defaults to DEFAULT_ADDR.</span>
+<span class="sd">        port (int): Port of the plotter. Defaults to DEFAULT_PORT_IMAGEPLOTTER.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">addr</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;ping&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ConnectionRefusedError</span><span class="p">:</span>
+        <span class="n">fn_entry</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;entry_points/lineplotter.py&#39;</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">_get_executable</span><span class="p">(),</span> <span class="nb">str</span><span class="p">(</span><span class="n">fn_entry</span><span class="o">.</span><span class="n">absolute</span><span class="p">()),</span>
+                              <span class="s1">&#39;--addr&#39;</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="s1">&#39;--port&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">)],</span>
+                             <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span>
+                             <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_ping_or_launch_imageplotter</span><span class="p">(</span><span class="n">addr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Try to connect an imageplotter. If refused, this launches a new plotter.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        addr (str): Address of the plotter. Defaults to DEFAULT_ADDR.</span>
+<span class="sd">        port (int): Port of the plotter. Defaults to DEFAULT_PORT_IMAGEPLOTTER.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">addr</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;ping&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ConnectionRefusedError</span><span class="p">:</span>
+        <span class="n">fn_entry</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;entry_points/imageplotter.py&#39;</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">_get_executable</span><span class="p">(),</span> <span class="nb">str</span><span class="p">(</span><span class="n">fn_entry</span><span class="o">.</span><span class="n">absolute</span><span class="p">()),</span>
+                              <span class="s1">&#39;--addr&#39;</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="s1">&#39;--port&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">)],</span>
+                             <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span>
+                             <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_send_data</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">addr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Send an object to the plotter.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        v (Any): an object to be sent.</span>
+<span class="sd">        addr (str): Address of the plotter.</span>
+<span class="sd">        port (int): Port of the plotter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">addr</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;data&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="n">s</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">2048</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_send_attrs</span><span class="p">(</span><span class="n">addr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">attrs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Send attributes to the plotter.</span>
+
+<span class="sd">    If all items of ``attrs`` are None, this function does nothing.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        addr (str): Address of the plotter.</span>
+<span class="sd">        port (int): Port of the plotter.</span>
+<span class="sd">        attrs (dict): Attributes to be sent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">attrs</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+        <span class="k">return</span>
+
+    <span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">addr</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;attr&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="n">s</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">2048</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_executable</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Get a python executable to launch a plotter.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: filename to the python executable</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">KEY_EXE</span> <span class="o">=</span> <span class="s1">&#39;SOCKETPLOTTER_PYTHON_EXECUTABLE&#39;</span>
+    <span class="k">if</span> <span class="n">KEY_EXE</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">KEY_EXE</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">sys</span><span class="o">.</span><span class="n">executable</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kosuke Mizuno.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

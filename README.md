@@ -81,3 +81,7 @@ You can specify your python executable to launch plotter GUIs via an environment
 ### [0.1.0]
 - released
 
+
+## Memo
+
+- `sphinx-build docs docs/_build` at the repo root.
