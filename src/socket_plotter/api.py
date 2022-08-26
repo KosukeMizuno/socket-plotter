@@ -30,7 +30,7 @@ def plot_lines(*dat,
 
     The structure of ``dat`` will be automatically determined.
     ``dat`` should be in the following forms:
-    
+
     - ``ydata``
     - ``[ydata]``
     - ``xdata, ydata``
