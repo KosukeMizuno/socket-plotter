@@ -9,17 +9,30 @@ from PySide2 import QtCore
 
 
 class QThreadReceiver(QtCore.QThread):
-    """
-    1. 接続を受けたら、以下のようなdict (header) をjsonで受け取る
-        {'size': int, 'type': Literal['data', 'data_json', 'attr', 'ping']}
-        - type==ping なら何もせずに次の接続をまつ
-    2. `A header was received.` と返す
-    3. (1)で受けたサイズだけデータを受け取る
-    4. type==(data|data_json) ならsigDataでui側へ渡す。type==attrならsigAttrでui側へ渡す
-      - data|attr だったらデータをpickleで受け取る
-      - data_json だった場合はデータをjsonで受け取る
+    """QThread as a socket-receiver
 
-    途中でエラーしたら sigErrorを発してui側へ通知
+    The communication protocol is as the followings:
+
+    1. Wait a connection
+    2. Receive a header in json format
+       ````json
+       {
+         "size": int,
+         "type": Literal['data', 'data_json', 'attr', 'ping']
+       }
+       ````
+       If `type==ping`, do nothing. Go to (1).
+    3. Return a string, `A header was received.`
+    4. Receive `size` bytes.
+       If `type==data_json`, a json-formatted data is coming.
+       Otherwise, the incoming object is deserialized by `pickle.loads`.
+
+    When the above protocol finishes properly, the received object will
+    be passed to the received object to the plotter.
+    - If `type==data or data_json`, using `sigData`.
+    - If `type==attr`, using `sigAttr`.
+
+    When an error occurs during a protocol, `sigError` will be emitted.
     """
     buffer_size = 2048
     timeout = 0.1
@@ -70,6 +83,11 @@ class QThreadReceiver(QtCore.QThread):
         self.s.close()
 
     def _recv(self) -> tuple[str, Any]:
+        """Communicate once.
+
+        Returns:
+            tuple[protocol type (str), incoming object (Any)]
+        """
         conn, _ = self.s.accept()
         with conn:
             header_bytes = conn.recv(self.buffer_size)

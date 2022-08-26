@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Any, Sequence
 
 from PySide2.QtWidgets import QApplication
 import numpy as np
@@ -39,31 +40,46 @@ class LinePlotter():
         if attrs.get('windowsize', None):
             self.win.resize(*attrs['windowsize'])
 
-    def draw_unpack(self, args):
-        self.draw(*args)
-
     def clear(self):
         for p in self.plots:
             p.setData([], [])
 
-    def draw(self, *args):
+    def draw_unpack(self, args: Sequence[Any]):
+        """wrapper for signal communication.
+
+        This function receives a sequence object.
+        The object will be unpacked and pass to `draw`.
+
+        Args:
+            args (Sequence[Any]): an object to be unpacked.
         """
-        args:
-            - ydata
-            - [ydata]
-            - xdata, ydata
-            - xdata, [ydata]
-            - xdata, ydata1, ydata2
-            - xdata, ydata1, ydata2, ...
+        self.draw(*args)
+
+    def draw(self, *dat):
+        """Plot a line or lines.
+
+        The structure of `dat` will be automatically determined.
+        `dat` should be in the following forms:
+        - ydata
+        - [ydata]
+        - xdata, ydata
+        - xdata, [ydata]
+        - xdata, ydata1, ydata2, ...
+
+        If socket connection is refused, a new plotter will be launched.
+
+        Args:
+            *dat: data to be plotted. See the above note.
         """
+        # determine the structure of dat & extract xdata and ydata.
         xdata = ydata = None
-        if len(args) == 1:
-            ydata = args[0]
-        elif len(args) == 2:
-            xdata, ydata = args
+        if len(dat) == 1:
+            ydata = dat[0]
+        elif len(dat) == 2:
+            xdata, ydata = dat
         else:  # len(args) > 2
-            xdata = args[0]
-            ydata = args[1:]
+            xdata = dat[0]
+            ydata = dat[1:]
 
         vec = np.array(ydata)
         if len(vec.shape) == 1:
@@ -72,11 +88,13 @@ class LinePlotter():
         if xdata is None:
             xdata = np.arange(len(vec[0]))
 
+        # make plotitem instances if needed.
         if len(self.plots) < len(vec):
             for _ in range(len(vec) - len(self.plots)):
                 p = self.plotitem.plot()
                 self.plots.append(p)
 
+        # draw lines
         self.clear()
         for i, (p, v) in enumerate(zip(self.plots, vec)):
             p.setPen(pg.mkPen(i, hues=max(len(vec), 9)))

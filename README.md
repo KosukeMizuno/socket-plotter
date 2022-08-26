@@ -64,6 +64,9 @@ You can specify your python executable to launch plotter GUIs via an environment
 
 
 ## Change log
+### wip
+- add docstrings
+
 ### [0.1.3]
 - headers should be json-formatted.
 - implement json-based data transfer

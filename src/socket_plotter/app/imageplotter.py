@@ -54,13 +54,15 @@ class ImagePlotter():
         self.imageitem.clear()
 
     def draw(self, img):
-        """
-        args:
-            - img, 2d array_like
+        """Draw the image.
+
+        If `img` is not 2-dimensional, do nothing.
+
+        Args:
+            img (2d array_like): an image to be drawn.
         """
         vec = np.array(img)
         if len(vec.shape) != 2:
-            self.clear()
             return
 
         self.imageitem.setImage(vec)
