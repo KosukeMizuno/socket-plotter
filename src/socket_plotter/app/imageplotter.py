@@ -7,9 +7,9 @@ import pyqtgraph as pg
 from .receiver import QThreadReceiver
 
 
-class ImagePlotter():
+class ImagePlotter:
     DEFAULT_SIZE = (600, 400)
-    DEFAULT_TITLE = 'Image Plotter'
+    DEFAULT_TITLE = "Image Plotter"
 
     def __init__(self, addr: str, port: int):
         self.app = QApplication([])
@@ -18,7 +18,7 @@ class ImagePlotter():
         self.win.show()
 
         self.imageitem = pg.ImageItem()
-        self.imageitem.setOpts(axisOrder='row-major')
+        self.imageitem.setOpts(axisOrder="row-major")
 
         self.viewbox = self.win.addViewBox()
         self.viewbox.setAspectLocked(lock=True)
@@ -43,12 +43,12 @@ class ImagePlotter():
         self.receiver.start()
 
     def set_attributes(self, attrs: dict):
-        if 'xlabel' in attrs:
-            self.plotitem.setLabel('bottom', attrs['xlabel'])
-        if 'ylabel' in attrs:
-            self.plotitem.setLabel('left', attrs['ylabel'])
-        if 'windowsize' in attrs:
-            self.win.resize(*attrs['windowsize'])
+        if "xlabel" in attrs:
+            self.plotitem.setLabel("bottom", attrs["xlabel"])
+        if "ylabel" in attrs:
+            self.plotitem.setLabel("left", attrs["ylabel"])
+        if "windowsize" in attrs:
+            self.win.resize(*attrs["windowsize"])
 
     def clear(self):
         self.imageitem.clear()

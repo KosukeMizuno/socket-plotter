@@ -8,9 +8,9 @@ import pyqtgraph as pg
 from .receiver import QThreadReceiver
 
 
-class LinePlotter():
+class LinePlotter:
     DEFAULT_SIZE = (600, 400)
-    DEFAULT_WINDOW_TITLE = 'Line Plotter'
+    DEFAULT_WINDOW_TITLE = "Line Plotter"
 
     def __init__(self, addr: str, port: int):
         self.app = QApplication([])
@@ -33,12 +33,12 @@ class LinePlotter():
         self.receiver.start()
 
     def set_attributes(self, attrs: dict):
-        if attrs.get('xlabel', None):
-            self.plotitem.setLabel('bottom', attrs['xlabel'])
-        if attrs.get('ylabel', None):
-            self.plotitem.setLabel('left', attrs['ylabel'])
-        if attrs.get('windowsize', None):
-            self.win.resize(*attrs['windowsize'])
+        if attrs.get("xlabel", None):
+            self.plotitem.setLabel("bottom", attrs["xlabel"])
+        if attrs.get("ylabel", None):
+            self.plotitem.setLabel("left", attrs["ylabel"])
+        if attrs.get("windowsize", None):
+            self.win.resize(*attrs["windowsize"])
 
     def clear(self):
         for p in self.plots:

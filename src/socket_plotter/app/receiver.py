@@ -34,6 +34,7 @@ class QThreadReceiver(QtCore.QThread):
 
     When an error occurs during a protocol, ``sigError`` will be emitted.
     """
+
     buffer_size = 2048
     timeout = 0.1
 
@@ -62,11 +63,11 @@ class QThreadReceiver(QtCore.QThread):
         while self._flg_listen:
             try:
                 type, dat = self._recv()
-                if type in ('data', 'data_json'):
+                if type in ("data", "data_json"):
                     self.sigData.emit(dat)
-                elif type == 'attr':
+                elif type == "attr":
                     self.sigAttr.emit(dat)
-                elif type == 'ping':
+                elif type == "ping":
                     pass
                 else:
                     self.sigError.emit()
@@ -92,16 +93,16 @@ class QThreadReceiver(QtCore.QThread):
         with conn:
             header_bytes = conn.recv(self.buffer_size)
             header = json.loads(header_bytes)
-            if header['type'] == 'ping':
-                return 'ping', None
+            if header["type"] == "ping":
+                return "ping", None
 
             # receiving body
-            conn.send(b'A header was received.')
+            conn.send(b"A header was received.")
 
-            databuf = bytearray(header['size'])
+            databuf = bytearray(header["size"])
             conn.recv_into(databuf)
 
-        if header['type'] == 'data_json':
-            return header['type'], json.loads(databuf)
+        if header["type"] == "data_json":
+            return header["type"], json.loads(databuf)
         else:
-            return header['type'], pickle.loads(databuf)
+            return header["type"], pickle.loads(databuf)

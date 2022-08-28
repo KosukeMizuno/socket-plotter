@@ -16,16 +16,19 @@ import pickle
 import subprocess
 from pathlib import Path
 
-DEFAULT_ADDR = '127.0.0.1'
+DEFAULT_ADDR = "127.0.0.1"
 DEFAULT_PORT_LINEPLOTTER = 8765
 DEFAULT_PORT_IMAGEPLOTTER = 8766
 
 
-def plot_lines(*dat,
-               xlabel: Optional[str] = None, ylabel: Optional[str] = None,
-               windowsize: Optional[tuple[int, int]] = None,
-               addr: str = DEFAULT_ADDR,
-               port: int = DEFAULT_PORT_LINEPLOTTER):
+def plot_lines(
+    *dat,
+    xlabel: Optional[str] = None,
+    ylabel: Optional[str] = None,
+    windowsize: Optional[tuple[int, int]] = None,
+    addr: str = DEFAULT_ADDR,
+    port: int = DEFAULT_PORT_LINEPLOTTER,
+):
     """Plot a line or lines.
 
     The structure of ``dat`` will be automatically determined.
@@ -55,11 +58,14 @@ def plot_lines(*dat,
     _send_attrs(addr, port, attrs)
 
 
-def plot_image(img,
-               xlabel: Optional[str] = None, ylabel: Optional[str] = None,
-               windowsize: Optional[tuple[int, int]] = None,
-               addr: str = DEFAULT_ADDR,
-               port: int = DEFAULT_PORT_IMAGEPLOTTER):
+def plot_image(
+    img,
+    xlabel: Optional[str] = None,
+    ylabel: Optional[str] = None,
+    windowsize: Optional[tuple[int, int]] = None,
+    addr: str = DEFAULT_ADDR,
+    port: int = DEFAULT_PORT_IMAGEPLOTTER,
+):
     """Plot an image.
 
     If socket connection is refused, a new plotter will be launched.
@@ -83,10 +89,12 @@ def plot_image(img,
     _send_attrs(addr, port, attrs)
 
 
-def plot_image_and_lines(img,
-                         addr: str = DEFAULT_ADDR,
-                         port_image: int = DEFAULT_PORT_IMAGEPLOTTER,
-                         port_lines: int = DEFAULT_PORT_LINEPLOTTER):
+def plot_image_and_lines(
+    img,
+    addr: str = DEFAULT_ADDR,
+    port_image: int = DEFAULT_PORT_IMAGEPLOTTER,
+    port_lines: int = DEFAULT_PORT_LINEPLOTTER,
+):
     """Plot an image, and plot each row of the image
 
     If socket connection is refused, a new plotter will be launched.
@@ -114,14 +122,22 @@ def _ping_or_launch_lineplotter(addr: str, port: int):
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((addr, port))
-            header = json.dumps({'type': 'ping'}).encode('utf-8')
+            header = json.dumps({"type": "ping"}).encode("utf-8")
             s.send(header)
     except ConnectionRefusedError:
-        fn_entry = Path(__file__).parent / 'entry_points/lineplotter.py'
-        _ = subprocess.Popen([_get_executable(), str(fn_entry.absolute()),
-                              '--addr', addr, '--port', str(port)],
-                             stdout=subprocess.DEVNULL,
-                             stderr=subprocess.DEVNULL)
+        fn_entry = Path(__file__).parent / "entry_points/lineplotter.py"
+        _ = subprocess.Popen(
+            [
+                _get_executable(),
+                str(fn_entry.absolute()),
+                "--addr",
+                addr,
+                "--port",
+                str(port),
+            ],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
 
 
 def _ping_or_launch_imageplotter(addr: str, port: int):
@@ -134,14 +150,22 @@ def _ping_or_launch_imageplotter(addr: str, port: int):
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((addr, port))
-            header = json.dumps({'type': 'ping'}).encode('utf-8')
+            header = json.dumps({"type": "ping"}).encode("utf-8")
             s.send(header)
     except ConnectionRefusedError:
-        fn_entry = Path(__file__).parent / 'entry_points/imageplotter.py'
-        _ = subprocess.Popen([_get_executable(), str(fn_entry.absolute()),
-                              '--addr', addr, '--port', str(port)],
-                             stdout=subprocess.DEVNULL,
-                             stderr=subprocess.DEVNULL)
+        fn_entry = Path(__file__).parent / "entry_points/imageplotter.py"
+        _ = subprocess.Popen(
+            [
+                _get_executable(),
+                str(fn_entry.absolute()),
+                "--addr",
+                addr,
+                "--port",
+                str(port),
+            ],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
 
 
 def _send_data(v: Any, addr: str, port: int):
@@ -156,7 +180,7 @@ def _send_data(v: Any, addr: str, port: int):
         s.connect((addr, port))
 
         data = pickle.dumps(v)
-        header = json.dumps({'size': len(data), 'type': 'data'}).encode('utf-8')
+        header = json.dumps({"size": len(data), "type": "data"}).encode("utf-8")
 
         s.send(header)
         _ = s.recv(2048)
@@ -180,7 +204,7 @@ def _send_attrs(addr: str, port: int, attrs: dict):
         s.connect((addr, port))
 
         data = pickle.dumps(attrs)
-        header = json.dumps({'size': len(data), 'type': 'attr'}).encode('utf-8')
+        header = json.dumps({"size": len(data), "type": "attr"}).encode("utf-8")
 
         s.send(header)
         _ = s.recv(2048)
@@ -193,7 +217,7 @@ def _get_executable() -> str:
     Returns:
         str: filename to the python executable
     """
-    KEY_EXE = 'SOCKETPLOTTER_PYTHON_EXECUTABLE'
+    KEY_EXE = "SOCKETPLOTTER_PYTHON_EXECUTABLE"
     if KEY_EXE in os.environ:
         p = Path(os.environ[KEY_EXE])
         if p.exists():
