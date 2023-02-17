@@ -14,7 +14,7 @@ def run(addr: str, port: int):
         QApplication.instance().exec_()
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(description="launch a line plotter")
     parser.add_argument("--addr", default=DEFAULT_ADDR, help=f"default={DEFAULT_ADDR}")
     parser.add_argument(
@@ -26,3 +26,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     run(args.addr, args.port)
+
+
+if __name__ == "__main__":
+    main()

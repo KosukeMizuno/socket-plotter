@@ -7,15 +7,13 @@ Instant plotter based on `pyqtgraph` via socket communication.
 
 ## Installation
 
-1. (if you want) create a python environment
-2. install PySide2 manually
-    - `pip install PySide2` or `conda install -c conda-forge pyside2`
-3. `pip install socket-plotter`
+### with pipx
 
-### dependency
-
-- PySide2
-- pyqtgraph
+1. Install CLI commands.
+    - `pipx install socket-plotter[pyside]`
+2. Install in python environments where you want to use this library
+    - activate your environment
+    - `pip install socket-plotter`
 
 
 ## Usage
@@ -40,9 +38,23 @@ plot_image_and_lines(img)
 
 The above three functions check if a plotter process exists.
 If needed, a new plotter process will be launched before plotting.
+You can specify your python executable to launch plotter GUIs via an environment variable `SOCKETPLOTTER_PYTHON_EXECUTABLE`.
 
 
-### address and ports
+### Launch via command line interface
+
+You can launch them as executables.
+Note that in this case `SOCKETPLOTTER_PYTHON_EXECUTABLE` will be ignore.
+The python interpreter in the installed environment will be used.
+
+```sh
+# launch it in background
+$ socket_image_plotter &
+$ socket_line_plotter &
+```
+
+
+### Addresses and ports
 
 The default ports are `8765` for lineplot and `8766` for imageplot.
 The default address is `127.0.0.1`.
@@ -50,10 +62,6 @@ Other ports and address can be assigned as the following:
 ```python
 plot_lines(xdata, ydata, addr='<address to plotter>', port=7777)
 ```
-
-### python environment
-
-You can specify your python executable to launch plotter GUIs via an environment variable `SOCKETPLOTTER_PYTHON_EXECUTABLE`
 
 
 ### screenshots
@@ -64,9 +72,10 @@ You can specify your python executable to launch plotter GUIs via an environment
 
 
 ## Change log
-### wip
-- add docstrings
-- add sphinx documentation
+
+### [0.1.4]
+- refine docstrings
+- add entrypoints via CLI
 
 ### [0.1.3]
 - headers should be json-formatted.
