@@ -1,5 +1,6 @@
 from socket_plotter import plot_lines, plot_image, plot_image_and_lines
 import numpy as np
+import time
 
 # for line plot
 xdata = np.arange(100)
@@ -9,6 +10,8 @@ plot_lines(xdata, ydata)
 # for image plot
 img = np.random.randn(100, 100)
 plot_image(img)
+
+time.sleep(1)
 
 # for both, the image and each row of the image are displayed.
 img = np.random.randn(100, 100)
