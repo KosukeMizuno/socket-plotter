@@ -91,6 +91,8 @@ plot_lines(xdata, ydata, addr='<address to plotter>', port=7777)
 - released
 
 
-## Memo
+## TODOs
 
-- `sphinx-build docs docs/_build` at the repo root.
+- QThreadの適切な終了方法がよくわからないので終了時にエラーメッセージが出る
+- socketのやりとりがキモいので修正したい
+
